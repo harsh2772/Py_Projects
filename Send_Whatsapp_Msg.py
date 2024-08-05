@@ -22,6 +22,6 @@ print(min)
 # print(lst)
 #
 # for i in lst:
-#     pywhatkit.sendwhatmsg("+919911573511","Hello Harsh",hr,min+1)
+#     pywhatkit.sendwhatmsg("+9194748484","Hello Harsh",hr,min+1)
 
-pywhatkit.sendwhatmsg("+919911573511","Hello Harsh",hr,min+1)
+pywhatkit.sendwhatmsg("+91937484848","Hello Harsh",hr,min+1)

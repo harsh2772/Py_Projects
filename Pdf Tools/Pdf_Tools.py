@@ -8,6 +8,8 @@ import Random_Password_Generator
 
 
 # Required  :- Poppler Path / bin :- in 121 line - 8) Case Function
+#              On That Same Path You Having "Split Pdfs" Named Folder
+#              On That Same Path "Extract Images" Named Folder
 
 # 1) Spliting Pdf
 

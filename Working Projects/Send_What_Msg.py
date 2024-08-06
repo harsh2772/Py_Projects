@@ -19,7 +19,7 @@ def send_whatsapp_message(msg: str, phone_numbers: list):
         print(str(e))
 
 if __name__ == "__main__":
-    friend_numbers = ["+910315323435”, “+919911573511”, “+919540840568”]
+    friend_numbers = ["+9112345678”, “+91737337383”, “+91474748493”]
     message="Hey bro, have you com"
     message="Hey bro, have you completed your Python task?"
     send_whatsapp_message(msg=message, phone_numbers=friend_numbers)

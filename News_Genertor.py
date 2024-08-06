@@ -8,7 +8,7 @@ import json
 
 query=input("Enter What type of news you want: ")
 
-url=f"https://newsapi.org/v2/everything?q={query}&from=2024-06-12&sortBy=publishedAt&apiKey=358c44b45c4c479d852bbdf6a8cae788"        # Url from newapi.org"
+url=f"https://newsapi.org/v2/everything?q={query}&from=2024-06-12&sortBy=publishedAt&apiKey=" Enter Your Api key"        # Url from newapi.org"
 
 r=requests.get(url)
 

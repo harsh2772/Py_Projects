@@ -4,7 +4,8 @@ import pdf2image
 import pdf2docx
 import docx2pdf
 from PyPDF2 import PdfReader, PdfWriter
-import Random_Password_Generator
+import random
+import string
 
 
 # Required  :- Poppler Path / bin :- in 121 line - 8) Case Function
@@ -55,8 +56,29 @@ def Merge(file_path,save_path):
 
     print("\nYour PDF has been merged successfully")
 
-
 # 4) Encrypting Pdf
+
+# It Generates For Random Password. It Made only for 4) Part of this Pdf
+
+def Password():
+
+  list=[i for i in string.ascii_letters]
+  list.extend(i for i in string.digits)
+  list.extend(i for i in string.punctuation)
+
+  length=int(input("Enter the length of password: "))
+
+  l1=[]
+
+  for i in range(length):
+    Pass=random.choice(list)
+    l1.append(Pass)
+
+  random.shuffle(l1)
+
+  password="".join(l1)
+
+  return password
 
 def Encrypted(pdf_path,save_path):
 
@@ -69,7 +91,7 @@ def Encrypted(pdf_path,save_path):
     if(x==1):
         password=input("Set a Password: ")               # Give the password
     elif(x==2):
-        password=Random_Password_Generator.Password()
+        password=Password()
         print("Your Random Password has been generated successfully")
         print("Your Pdf Password is:",password)
 
@@ -97,6 +119,7 @@ def Overlap(file_path1,file_path2,file1_page_no,file2_page_no,save_path):
 
 # 6) Converting pdf to docx
 def pdf2doc(file_path,save_path):
+
     old_pdf = file_path
     new_doc = save_path
 
@@ -195,6 +218,43 @@ def scalePdf(path):
 
     print("\nYour PDF File has been scaled successfully")
 
+
+
+# 12) Reverse Pdf
+def reverse(file_path,save_path):
+
+    old_pdf=pikepdf.Pdf.open(file_path)
+
+    old_pdf.pages.reverse()
+    old_pdf.save(save_path)
+
+    print("\nYour PDF File has been reversed successfully")
+
+
+# 13) Swapping Pdf  # It can't properly swap pages
+
+def swapPages(file_path,save_path):
+
+    old_pdf = pikepdf.Pdf.open(file_path)
+    old_pdf1 = pikepdf.Pdf.open(file_path)
+    x = int(input("Enter the page number 1: "))-1
+    y = int(input("Enter the page number 2: "))-1
+    old_pdf.pages[y]=old_pdf.pages[x]
+    old_pdf.pages[x]=old_pdf1.pages[x]
+
+    old_pdf.save(save_path)
+
+# 14) Delete Pages
+def delete_pages(file_path,save_path):
+
+    old_pdf = pikepdf.Pdf.open(file_path)
+
+    x=int(input("Enter the Delete Page No.: "))-1
+
+    del old_pdf.pages[x]
+    old_pdf.save(save_path)
+
+
 if __name__=="__main__":
 
     while True:
@@ -211,6 +271,9 @@ if __name__=="__main__":
             9) Compress Pdf
            10) Extracting Images From Pdf
            11) Scaling Pdf
+           12) Reverse Pdf
+           13) Swap Pages **
+           14) Delete Pages
            !!!!!Enter Any Other No. For Quit!!!!!""")
 
         x=int(input("Enter your choice: "))
@@ -306,6 +369,32 @@ if __name__=="__main__":
                 path = Path.replace("\\", "/")
 
                 scalePdf(path)
+
+            case 12:
+                Path = input("Enter the path of your PDF file: ")  # Path Like:- C:\Users\harsh\Desktop\Python_Projects\Pdf Tools
+                path = Path.replace("\\", "/")
+                file_name = input("Enter a file name: ")            # File Name:- What's your PDF file Name
+                file_path = f"{path}/{file_name}.pdf"
+                save_path = f"{path}/Reversed.pdf"
+                reverse(file_path, save_path)
+
+            case 13:
+                Path = input("Enter the path of your PDF file: ")  # Path Like:- C:\Users\harsh\Desktop\Python_Projects\Pdf Tools
+                path = Path.replace("\\", "/")
+                file_name = input("Enter a file name: ")            # File Name:- What's your PDF file Name
+                file_path = f"{path}/{file_name}.pdf"
+                save_path = f"{path}/Swapped.pdf"
+                swapPages(file_path, save_path)
+
+            case 14:
+                Path = input("Enter the path of your PDF file: ")  # Path Like:- C:\Users\harsh\Desktop\Python_Projects\Pdf Tools
+                path = Path.replace("\\", "/")
+                file_name = input("Enter a file name: ")            # File Name:- What's your PDF file Name
+                file_path = f"{path}/{file_name}.pdf"
+
+                save_path = f"{path}/Updated.pdf"
+
+                delete_pages(file_path, save_path)
 
             case _:
                 print("!!!!!!!!!!!EXIT!!!!!!!!!!")

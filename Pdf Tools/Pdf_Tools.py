@@ -1,3 +1,4 @@
+import PyPDF2
 import pikepdf
 from glob import glob
 import pdf2image
@@ -170,7 +171,7 @@ def pdfCompressor(path):
 
     writer.add_metadata(reader.metadata)
 
-    with open(f"{path}/Compressor.pdf", "wb") as fp:
+    with open(f"{path}/Compressed.pdf", "wb") as fp:
         writer.write(fp)
 
     print("\nYour PDF File has been compressed successfully")
@@ -198,23 +199,24 @@ def ExtractImages(file_path,save_path):
     print("\nAll Images have been extracted successfully")
 
 # 11) Scaling Pdf
-def scalePdf(path):
+
+def scalePdf(path,save_path):
 
     file_name = input("Enter a file name: ")  # File Name:- What's your PDF file Name
     file_path = f"{path}/{file_name}.pdf"
 
     reader = PdfReader(file_path)
-    page_no=int(input("Enter a page no: "))
-    page = reader.pages[page_no-1]
-
-    # Scale
-    scale=int(input("Enter a scale value: "))
-    page.scale_by(scale)
-
-    # Write the result to a file
     writer = PdfWriter()
-    writer.add_page(page)
-    writer.write(f"{path}/Scaled.pdf")
+
+    # ****Scale****
+    scale = int(input("Enter a scale value: "))
+
+    for page in reader.pages:
+        page.scale_by(scale)
+        writer.add_page(page)
+
+    with open(save_path, 'wb') as fp:
+        writer.write(fp)
 
     print("\nYour PDF File has been scaled successfully")
 
@@ -255,6 +257,27 @@ def delete_pages(file_path,save_path):
     old_pdf.save(save_path)
 
 
+# 15) Crop Pdf
+
+def crop_pdf(file_path,save_path):
+
+    reader = PdfReader(file_path)
+    writer = PdfWriter()
+
+    x = int(input("Enter The Upper_Left x-aixs: "))
+    y = int(input("Enter The Upper_Left y-aixs: "))
+    xx = int(input("Enter The Upper_Right x-aixs: "))
+    yy = int(input("Enter The Upper_Right y-aixs: "))
+    for page in reader.pages:
+        page.cropbox.upper_left = (x, y)
+        page.cropbox.lower_right = (xx, yy)
+        writer.add_page(page)
+
+    with open(save_path, 'wb') as fp:
+        writer.write(fp)
+
+
+
 if __name__=="__main__":
 
     while True:
@@ -269,11 +292,12 @@ if __name__=="__main__":
             7) Docx to PDF
             8) Pdf to Image
             9) Compress Pdf
-           10) Extracting Images From Pdf
+           10) Extracting Images From Pdf 
            11) Scaling Pdf
            12) Reverse Pdf
            13) Swap Pages **
            14) Delete Pages
+           15) Crop Pdf
            !!!!!Enter Any Other No. For Quit!!!!!""")
 
         x=int(input("Enter your choice: "))
@@ -283,6 +307,7 @@ if __name__=="__main__":
                 path=Path.replace("\\","/")
                 file_name=input("Enter a file name: ")                  # File Name:- What's your PDF file Name
                 file_path=f"{path}/{file_name}.pdf"
+
                 save_path=f"{path}/Split Pdfs"                          # Make Sure You Create a "Split Pdfs" named folder in your path.
                 split_pdf(file_path,save_path)
 
@@ -291,6 +316,7 @@ if __name__=="__main__":
                 path = Path.replace("\\", "/")
                 file_name = input("Enter a file name: ")                # File Name:- What's your PDF file Name
                 file_path = f"{path}/{file_name}.pdf"
+
                 save_path = f"{path}/Rotated.pdf"
                 Rotate(file_path,save_path)
 
@@ -298,6 +324,7 @@ if __name__=="__main__":
                 Path = input("Enter the path of your PDF file: ")       # Path Like:- C:\Users\harsh\Desktop\Python_Projects\Pdf Tools
                 path = Path.replace("\\", "/")
                 file_path = f"{path}/*.pdf"
+
                 save_path = f"{path}/Merged.pdf"
                 Merge(file_path,save_path)
 
@@ -329,6 +356,7 @@ if __name__=="__main__":
                 path = Path.replace("\\", "/")
                 file_name = input("Enter a file name: ")                        # File Name:- What's your PDF file Name
                 file_path = f"{path}/{file_name}.pdf"
+
                 save_path = f"{path}/pdf2doc.docx"
                 pdf2doc(file_path,save_path)
 
@@ -337,6 +365,7 @@ if __name__=="__main__":
                 path = Path.replace("\\", "/")
                 file_name = input("Enter a file name: ")                # File Name:- What's your Docx file Name
                 file_path = f"{path}/{file_name}.docx"
+
                 save_path = f"{path}/doc2pdf.pdf"
                 doc2pdf(file_path,save_path)
 
@@ -361,6 +390,7 @@ if __name__=="__main__":
                 path = Path.replace("\\", "/")
                 file_name = input("Enter a file name: ")  # File Name:- What's your PDF file Name
                 file_path = f"{path}/{file_name}.pdf"
+
                 ExtractImages(file_path,path)
 
 
@@ -368,13 +398,15 @@ if __name__=="__main__":
                 Path = input("Enter the path of your Pdf file: ")  # Path Like:- C:\Users\harsh\Desktop\Python_Projects\Pdf Tools
                 path = Path.replace("\\", "/")
 
-                scalePdf(path)
+                save_path = f"{path}/Scaled.pdf"
+                scalePdf(path,save_path)
 
             case 12:
                 Path = input("Enter the path of your PDF file: ")  # Path Like:- C:\Users\harsh\Desktop\Python_Projects\Pdf Tools
                 path = Path.replace("\\", "/")
                 file_name = input("Enter a file name: ")            # File Name:- What's your PDF file Name
                 file_path = f"{path}/{file_name}.pdf"
+
                 save_path = f"{path}/Reversed.pdf"
                 reverse(file_path, save_path)
 
@@ -383,6 +415,7 @@ if __name__=="__main__":
                 path = Path.replace("\\", "/")
                 file_name = input("Enter a file name: ")            # File Name:- What's your PDF file Name
                 file_path = f"{path}/{file_name}.pdf"
+
                 save_path = f"{path}/Swapped.pdf"
                 swapPages(file_path, save_path)
 
@@ -393,8 +426,16 @@ if __name__=="__main__":
                 file_path = f"{path}/{file_name}.pdf"
 
                 save_path = f"{path}/Updated.pdf"
-
                 delete_pages(file_path, save_path)
+
+            case 15:
+                Path = input("Enter the path of your PDF file: ")   # Path Like:- C:\Users\harsh\Desktop\Python_Projects\Pdf Tools
+                path = Path.replace("\\", "/")
+                file_name = input("Enter a file name: ")            # File Name:- What's your PDF file Name
+                file_path = f"{path}/{file_name}.pdf"
+
+                save_path = f"{path}/Cropped.pdf"
+                crop_pdf(file_path, save_path)
 
             case _:
                 print("!!!!!!!!!!!EXIT!!!!!!!!!!")
